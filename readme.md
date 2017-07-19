@@ -136,8 +136,19 @@
 三次握手  
 ![三次握手](https://raw.githubusercontent.com/llysrv/Interview/master/img/%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.png)  
 四次断开  
-![四次断开](https://raw.githubusercontent.com/llysrv/Interview/master/img/%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.jpg)
-
+因为之前存在没有传送完的数据，所以要等待。  
+![四次断开](https://raw.githubusercontent.com/llysrv/Interview/master/img/%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.jpg)  
+小故事  
+三次握手：  
+A:喂，你听得到吗？  
+B:我听得到呀，你听得到我吗？  
+A:我能听到你，今天balabala……  
+四次挥手：  
+A:喂，我不说了。
+B:我知道了。等下，上一句还没说完。Balabala…..  
+B:好了，说完了，我也不说了。  
+A:我知道了。  
+A等待2MSL,保证B收到了消息,否则重说一次”我知道了”(如果没收到将进行重传)  
 4. udp  
     【待补充】
 
