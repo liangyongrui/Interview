@@ -124,13 +124,6 @@
 
 2. osi七层  
     ![osi](https://raw.githubusercontent.com/llysrv/Interview/master/img/OSI.gif)
-    1. 物理层
-    1. 数据链路层
-    1. 网络层
-    1. 传输层
-    1. 会话层
-    1. 表示层
-    1. 应用层
 
 3. TCP  
 三次握手  
