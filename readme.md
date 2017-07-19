@@ -122,7 +122,8 @@
         * 利用负载均衡优化和加速HTTP应用
         * 利用HTTP Cache来优化网站
 
-2. osi七层
+2. osi七层  
+    ![osi](https://raw.githubusercontent.com/llysrv/Interview/master/img/OSI.gif)
     1. 物理层
     1. 数据链路层
     1. 网络层
@@ -132,8 +133,10 @@
     1. 应用层
 
 3. TCP  
-三次握手，四次断开  
-    【待补充】
+三次握手  
+![三次握手](https://raw.githubusercontent.com/llysrv/Interview/master/img/%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.png)  
+四次断开  
+![四次断开](https://raw.githubusercontent.com/llysrv/Interview/master/img/%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B.jpg)
 
 4. udp  
     【待补充】
