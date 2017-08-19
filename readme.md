@@ -79,6 +79,16 @@
     * 第二范式（2NF）：数据库表中不存在字段对任一候选关码段的部分函数依赖；
     * 第三范式（3NF）：数据表中如果不存在字段对任一候选码字段的传递函数依赖。
 
+1. DML、DDL、DCL区别
+* DML(Data Manipulation Language，数据操作语言)  
+  如：SELECT、UPDATE、INSERT、DELETE，这4条命令是用来对数据库里的数据进行操作的语言
+* DDL(Data Definition Language，数据定义语言)  
+  主要的命令有CREATE、ALTER、DROP等，DDL主要是用在定义或改变表的结构，数据类型，表之间的链接和约束等初始化工作上，他们大多在建立表时使用
+* DCL(Data Control Language，数据控制语言)  
+  用来设置或更改数据库用户或角色权限的语句，包括grant,deny,revoke等语句。
+
+
+1. https://www.nowcoder.com/test/question/done?tid=9501873&qid=46334#summary
 # 框架
 ### Spring
 1. spring 的优点？
@@ -152,6 +162,14 @@
     13. Http优化
         * 利用负载均衡优化和加速HTTP应用
         * 利用HTTP Cache来优化网站
+    1. http缓存机制  
+    【待补充】
+    1. DNS解析的方法  
+    【待补充】
+    1. 跨域方法  
+    【待补充】  
+    1. xss, csrf  
+    【待补充】
 2. osi七层  
     ![osi](https://raw.githubusercontent.com/llysrv/Interview/master/img/OSI.gif)
 
@@ -195,6 +213,9 @@
     8. 流量控制  
         * TCP有流量控制。在任何用户数据可以被发送之前，TCP需要三数据包来设置一个套接字连接。TCP处理的可靠性和拥塞控制。
         * UDP不能进行流量控制。
+
+1. https://www.nowcoder.com/test/question/done?tid=9501873&qid=46337#summary
+
 # Java
 
 ### JVM
@@ -205,15 +226,13 @@
     * 方法区中常量引用的对象
     * 本地方法栈中引用的对象（Native对象）
 
-16. 内存模型 为什么要设置工作内存和主内存  
-    【待补充】
-17. GC的过程 当发现虚拟机频繁GC时应该怎么办？  
-    【待补充】  
-1. 请描述java的内存管理原理   
+16. 为什么要设置工作内存和主内存  
+    缓存加速，相当于是内存和硬盘的关系。
+17. 当发现虚拟机频繁GC时应该怎么办？  
     【待补充】  
 2. 请描述java的内存分区  
     【待补充】  
-3. 请描述java的对象生命周期，以及对象的访问？a 
+3. 请描述java的对象生命周期，以及对象的访问？   
     【待补充】  
 1. JVM调优  
     【待补充】  
@@ -322,18 +341,27 @@
     * 任何时候，处于临界区内的进程不可多于一个。如已有进程进入自己的临界区，则其它所有试图进入临界区的进程必须等待；
     * 进入临界区的进程要在有限时间内退出，以便其它进程能及时进入自己的临界区；
     * 如果进程不能进入自己的临界区，则应让出CPU，避免进程出现“忙等”现象。
+1. 数据传输率（C）=记录位密度（D） x   线速度( V )
+1. https://www.nowcoder.com/test/question/done?tid=9502589&qid=44781#summary
 
 ## Linux 
 1. 常用命令  
 【待补充】
 2. Linux文件属性
 【待补充】
-
+1. https://www.nowcoder.com/test/question/done?tid=9501873&qid=46328#summary
 # 设计模式
     【待补充】
 
+
+# 数学
+### 概率论
+1. https://www.nowcoder.com/test/question/done?tid=9501873&qid=46327#summary
+
+
 # 小算法
-只总结一些我接触的少的算法。  
+只总结一些我接触的少，或者常见但是忘记了的算法 
 1. Reservoir Sampling  
     【待补充】
 2. 用惯了库各种排序都不会手写了，主要是堆排、快排
+3. 哈夫曼树
