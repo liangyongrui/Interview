@@ -349,6 +349,9 @@
 【待补充】
 2. Linux文件属性
 【待补充】
+1. Linux中stdout和stderr输出缓冲
+    * 结论：stdout使用了行缓冲区，stderr没使用缓冲区
+    * 仔细的说，stdout只有在换行的时候才输出
 1. https://www.nowcoder.com/test/question/done?tid=9501873&qid=46328#summary
 # 设计模式
     【待补充】
