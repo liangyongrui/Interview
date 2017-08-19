@@ -112,7 +112,15 @@
 ### Spring MVC
 ### Mybatis
 ### Hibernate
-
+1. 优化Hibernate的7大措施【不懂。。】
+    * 尽量使用many-to-one，避免使用单项one-to-many
+    * 灵活使用单向one-to-many
+    * 不用一对一，使用多对一代替一对一
+    * 配置对象缓存，不使用集合缓存
+    * 一对多使用Bag 多对一使用Set
+    * 继承使用显示多态 HQL:from object polymorphism="exlicit" 避免查处所有对象
+    * 消除大表，使用二级缓存
+    
 # 计算机网络
 1. http
     1. http和https区别  
@@ -280,6 +288,12 @@
         * 最后，Servlet 是由 JVM 的垃圾回收器进行垃圾回收的。
     2. 不是线程安全的，因为Servlet只会被实例化一次。如果Servlet中含有可变的域
 
+1. Java表达式转型规则由低到高转换
+    * 所有的byte,short,char型的值将被提升为int型；
+    * 如果有一个操作数是long型，计算结果是long型；
+    * 如果有一个操作数是float型，计算结果是float型；
+    * 如果有一个操作数是double型，计算结果是double型；
+    * 被fianl修饰的变量不会自动改变类型，当2个final修饰相操作时，结果会根据左边变量的类型而转化。
 
 # 操作系统
 1. 进程和线程的区别  
