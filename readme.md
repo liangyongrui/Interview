@@ -253,6 +253,8 @@
 
 15. volatile关键字的作用  
     保证变量的可见性
+    
+1. LinkedTransferQueue【待补充】
 
 ### 其他
 1. 优化反射性能
@@ -368,6 +370,122 @@
     * 仔细的说，stdout只有在换行的时候才输出
 1. https://www.nowcoder.com/test/question/done?tid=9501873&qid=46328#summary
 # 设计模式
+
+### 常见的23种设计模式
+0. 详解参考 [Java之美[从菜鸟到高手演变]之设计模式](http://blog.csdn.net/zhangerqing/article/details/8194653/?spm=5176.100239.blogcont69707.9.A2VX6A#comments) ，我只是对这篇文章进行了提炼，错误的简单更正，能让自己回忆起来。
+
+1. 工厂方法模式
+    * 普通工厂模式，用字符串产生实例
+    * 多个工厂方法模式，直接调用相应的建造实例的方法
+    * 静态工厂方法模式，多个工厂方法模式里的方法置为静态的，不需要创建工厂实例，直接调用即可
+2. 抽象工厂模式
+    * 为了解决程序扩展问题
+    * 每个类对应一个工厂，然后这些工厂实现一个接口，使用时对相相应的工厂进行实例化，然后通过接口获取实例。
+    ```java
+    Provider provider = new SendMailFactory(); //Privider为所有工厂实现的接口
+    Sender sender = provider.produce(); //produce方法获取该工厂想要产生的实例
+    sender.Send(); 
+    ```
+3. 单例模式（Singleton）
+    * 实现一，静态加载
+    ```java
+    class Singleton {
+        private static Singleton instance = new Singleton();
+        private Singleton (){}
+        public static Singleton getInstance() {
+            return instance;
+        }
+    }
+    ```
+    * 实现二，双重锁定
+    ```java
+    class Singleton {
+        private static Singleton instance = null;
+        private Singleton() {}
+        public static Singleton getInstance() {
+            if (instance == null) {
+                synchronized (Singleton.class) {
+                    if (instance == null) {
+                        instance = new Singleton();
+                    }
+                }
+            }
+            return instance;
+        }
+    }
+    ```
+4. 建造者模式（Builder）
+    * Builder：给出一个接口，以规范产品对象的各个组成成分的建造。规定要实现复杂对象的哪些部分的创建。（人的身体有哪些部分）
+    * ConcreteBuilder：实现Builder接口，具体化复杂对象的各部分的创建。 在建造过程完成后，提供产品的实例。（某个人具体每部分的样子）
+    * Director：调用具体建造者来创建复杂对象的各个部分，在指导者中不涉及具体产品的信息，只负责保证对象各部分完整创建或按某种顺序创建。（按照样子来创建一个人）
+    * Product：要创建的复杂对象。（从Builder中接收这个人）
+5. 原型模式（Prototype）
+    * 用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象
+    * 原型类需要具备两个条件
+        * 实现Cloneable接口
+        * 重写Object类中的clone方法，如果是浅拷贝的话，直接super.clone()
+    * 优点
+        * 创建对象比直接new一个对象在性能上要好的多，因为Object类的clone方法是一个本地方法，它直接操作内存中的二进制流，特别是复制大对象时，性能的差别非常明显。
+        * 简化对象的创建，使得创建对象就像我们在编辑文档时的复制粘贴一样简单。
+6. 适配器模式（Adapter）
+    * 适配器模式将一个类的接口转换成客户期望的另一个接口，让原本不兼容的接口可以合作无间。
+    * 适配器对象实现原有接口
+    * 适配器对象组合一个实现新接口的对象
+    * 对适配器原有接口方法的调用被委托给新接口的实例的特定方法
+    ```java
+    public class Adapter implements OldInterface{ //实现旧接口  
+        private NewInterface newInterface;//组合新接口  
+        //在创建适配器对象时，必须传入一个新接口的实现类 
+        public Adapter(NewInterface newInterface) {
+            this.newInterface = newInterface;
+        }
+        //将对旧接口的调用适配到新接口 
+        @Override
+        public void oldFunction() {
+            newInterface.newFunction();
+        }
+    }  
+    ```
+7. 装饰器模式(Decorator)
+    * 简而言之，就是用一个装饰器，将需要装饰的类进行装饰，类似于AOP代理
+    * Component：组件对象的接口，可以给这些对象动态的添加职责；
+    * ConcreteComponent：具体的组件对象，实现了组件接口。该对象通常就是被装饰器装饰的原始对象，可以给这个对象添加职责；
+    * Decorator：所有装饰器的父类，需要定义一个与组件接口一致的接口(主要是为了实现装饰器功能的复用，即具体的装饰器A可以装饰另外一个具体的装饰器B，因为装饰器类也是一个Component)，并持有一个Component对象，该对象其实就是被装饰的对象。如果不继承组件接口类，则只能为某个组件添加单一的功能，即装饰器对象不能在装饰其他的装饰器对象。
+    * ConcreteDecorator：具体的装饰器类，实现具体要向被装饰对象添加的功能。用来装饰具体的组件对象或者另外一个具体的装饰器对象。
+    ```java
+    Component c1 = new ConcreteComponent(); //首先创建需要被装饰的原始对象(即要被装饰的对象)  
+    Decorator decoratorA = new ConcreteDecoratorA(c1); //给对象透明的增加功能A并调用  
+    decoratorA.operation();
+    Decorator decoratorB = new ConcreteDecoratorB(c1); //给对象透明的增加功能B并调用  
+    decoratorB.operation();
+    Decorator decoratorBandA = new ConcreteDecoratorB(decoratorA);//装饰器也可以装饰具体的装饰对象，此时相当于给对象在增加A的功能基础上在添加功能B  
+    decoratorBandA.operation();
+     ```
+8. 代理模式
+
+9. 外观模式
+10. 桥接模式
+11. 组合模式
+12. 享元模式。
+13. 策略模式
+14. 模板方法模式
+15. 观察者模式
+16. 迭代子模式
+17. 责任链模式
+18. 命令模式
+19. 备忘录模式
+20. 状态模式
+21. 访问者模式
+22. 中介者模式
+23. 解释器模式
+### 常见问题
+1. 单例模式相较于静态类的优点
+    * 静态类对接口不友好，Java8 才出现静态方法。
+    * 单例可以被延迟初始化，静态类一般在第一次加载是初始化。之所以延迟加载，是因为有些类比较庞大，所以延迟加载有助于提升性能。不过用静态实现的单例模式没有这个优点。
+    * 单例类可以被继承，他的方法可以被override。但是静态类内部方法都是static，无法被override。
+    * 单例类比较灵活，毕竟从实现上只是一个普通的Java类，只要满足单例的基本需求，你可以在里面随心所欲的实现一些其它功能，但是静态类不行。
+
+### 其他设计模式
 1. 桥接模式
     * 定义 ：将抽象部分与它的实现部分分离，使它们都可以独立地变化。
     * 意图 ：将抽象与实现解耦。
