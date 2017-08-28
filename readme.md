@@ -611,5 +611,7 @@
 1. Reservoir Sampling  
     【待补充】
 2. 排序
-    * 简单修改了一下DualPivotQuicksort的源码
+    * 简单修改了一下[DualPivotQuicksort](https://github.com/llysrv/Interview/blob/master/src/sort/DualPivotQuicksort.java)的源码
 3. 哈夫曼树
+
+# Python 3
