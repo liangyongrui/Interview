@@ -612,6 +612,15 @@
     【待补充】
 2. 排序
     * 简单修改了一下[DualPivotQuicksort](https://github.com/llysrv/Interview/blob/master/src/sort/DualPivotQuicksort.java)的源码
+    * 源码很强
+    * 含有：
+        * 插入排序
+        * 普通快排
+        * 双轴快排
+        * 归并排序
+    * 还有各种特判优化
+    * 值得一默
+        
 3. 哈夫曼树
 
 # Python 3
