@@ -371,14 +371,20 @@
     ID:13 Working*/
     ```
 
-1. Java中如何获取到线程dump文件
-    * 死循环、死锁、阻塞、页面打开慢等问题，打线程dump是最好的解决问题的途径。所谓线程dump也就是线程堆栈，获取到线程堆栈有两步：
-    * （1）获取到线程的pid，可以通过使用jps命令，在Linux环境下还可以使用ps -ef | grep java
-    * （2）打印线程堆栈，可以通过使用jstack pid命令，在Linux环境下还可以使用kill -3 pid
-    * 另外提一点，Thread类提供了一个getStackTrace()方法也可以用于获取线程堆栈。这是一个实例方法，因此此方法是和具体线程实例绑定的，每次获取获取到的是具体某个线程当前运行的堆栈，
 1. 阻塞队列BlockingQueue
+    * 就是一个带阻塞功能的队列
+    * 放入数据：
+        * offer(anObject):如果BlockingQueue可以容纳, 则返回true,否则返回false.
+        * offer(E o, long timeout, TimeUnit unit): 可以设定等待的时间，如果在指定的时间内，还不能往队列中，则返回失败。
+        * put(anObject): 如果BlockQueue没有空间,则调用此方法的线程被阻塞，直到BlockingQueue里面有空间再继续.
+    * 获取数据：
+        * poll(): 若不能立即取出返回null;
+        * poll(long timeout, TimeUnit unit): 如果在指定时间内，队列一旦有数据可取，则立即返回队列中的数据，否则返回null
+        * take():若BlockingQueue为空， 则进入等待状态直到BlockingQueue有新的数据被加入; 
+        * drainTo(Collection<? super E> c, int maxElements):一次性从BlockingQueue获取所有可用的数据对象（还可以指定获取数据的个数，第二个参数可选），通过该方法，可以提升获取数据效率；不需要多次分批加锁或释放锁。
+
 1. 锁（lock）和监视器（monitor）有什么区别？
-    * 锁是为了实现监视器排他性的一种手段（自己理解）
+    * 锁是为了实现监视器排他性的一种手段
 1. 怎么检测一个线程是否持有对象监视器
     * Thread类提供了一个holdsLock(Object obj)方法
     * 当且仅当对象obj的监视器被某当前线程持有的时候才会返回true，注意这是一个static方法.
