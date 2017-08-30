@@ -256,11 +256,15 @@
     * CallableAndFutureTask，利用Thread启动单线程
     ```java
     void testCallableAndFutureTask() throws InterruptedException, ExecutionException {
-        Callable<Integer> callable = () -> new Random().nextInt(100);
-        FutureTask<Integer> future = new FutureTask<>(callable);
+        FutureTask<Integer> future = new FutureTask<>(new Callable<Integer>() { //后面用lambda了
+            @Override
+            public Integer call() throws Exception {
+                return new Random().nextInt(100);
+            }
+        });
         new Thread(future).start();
-            Thread.sleep(5000);// 可能做一些事情
-            System.out.println(future.get());
+        Thread.sleep(5000);// 可能做一些事情
+        System.out.println(future.get());
     }
     ```
     * CallableAndFuture，利用线程池，启动单线程
@@ -289,11 +293,83 @@
     }
     ```
     * 和Runnable接口中的run()方法不同, Callable接口中的call()方法是有返回值的
-1. CyclicBarrier和CountDownLatch的区别
-    * 两个看上去有点像的类，都在java.util.concurrent下，都可以用来表示代码运行到某个点上，二者的区别在于：
-    * CyclicBarrier的某个线程运行到某个点上之后，该线程即停止运行，直到所有的线程都到达了这个点，所有线程才重新运行；CountDownLatch则不是，某线程运行到某个点上之后，只是给某个数值-1而已，该线程继续运行
-    * CyclicBarrier只能唤起一个任务，CountDownLatch可以唤起多个任务
-    * CyclicBarrier可重用，CountDownLatch不可重用，计数值为0该CountDownLatch就不可再用了
+1. CountDownLatch
+    * 先看用法
+    ```java
+     public static void main(String[] args) throws InterruptedException {
+         CountDownLatch latch = new CountDownLatch(2);//两个工人的协作  
+         Worker worker1 = new Worker("张三", latch);
+         Worker worker2 = new Worker("李四", latch);
+         worker1.start();
+         worker2.start();
+         latch.await();
+         System.out.println("all work done.");
+     }
+ 
+     static class Worker extends Thread {
+         String workerName;
+         CountDownLatch latch;
+ 
+         Worker(String workerName, CountDownLatch latch) {
+             this.workerName = workerName;
+             this.latch = latch;
+         }
+ 
+         public void run() {
+             try {
+                 System.out.println("Worker " + workerName + " do work begin.");
+                 Thread.sleep(1000);
+                 System.out.println("Worker " + workerName + " do work complete");
+             } catch (InterruptedException e) {
+                 e.printStackTrace();
+             } finally {
+                 latch.countDown();//工人完成工作，计数器减一  
+             }
+         }
+     }   
+    ```
+    * 主线程必须在启动其他线程后立即调用CountDownLatch.await()方法。这样主线程的操作就会在这个方法上阻塞，直到其他线程完成各自的任务。
+    * CountDownLatch只有await()和countDown()方法，分别表示等待和减一
+1. CyclicBarrier  
+    * CyclicBarrier简单的理解就是内存屏障
+    * CyclicBarrier初始化时规定一个数目，然后计算调用了CyclicBarrier.await()进入等待的线程数。当线程数达到了这个数目时，所有进入等待状态的线程被唤醒并继续。 
+    * CyclicBarrier初始时还可带一个Runnable的参数， 此Runnable任务在CyclicBarrier的数目达到后，所有其它线程被唤醒前被执行。
+    * 具体见代码
+    ```java
+    class TestCyclicBarrier {
+        private static final int THREAD_NUM = 5;
+    
+        public static void main(String[] args) {
+            //当所有线程到达barrier时执行，这里的lambda是Runnable(可选参数)
+            CyclicBarrier cb = new CyclicBarrier(THREAD_NUM, () -> System.out.println("Inside Barrier"));
+    
+            for (int i = 0; i < THREAD_NUM; i++) {
+                new Thread(() -> {
+                    System.out.println("Worker's waiting");
+                    //线程在这里等待，直到所有线程都到达barrier。
+                    try {
+                        cb.await();
+                    } catch (InterruptedException | BrokenBarrierException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("ID:" + Thread.currentThread().getId() + " Working");
+                }).start();
+            }
+        }
+    }
+    /* 执行结果
+    Worker's waiting
+    Worker's waiting
+    Worker's waiting
+    Worker's waiting
+    Worker's waiting
+    Inside Barrier
+    ID:15 Working
+    ID:14 Working
+    ID:12 Working
+    ID:16 Working
+    ID:13 Working*/
+    ```
 
 1. Java中如何获取到线程dump文件
     * 死循环、死锁、阻塞、页面打开慢等问题，打线程dump是最好的解决问题的途径。所谓线程dump也就是线程堆栈，获取到线程堆栈有两步：
