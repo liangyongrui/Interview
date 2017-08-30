@@ -247,16 +247,48 @@
     【待补充】  
 ### 并发
 1. 乐观锁，悲观锁
-    * 乐观锁  
-    乐观锁假设认为数据一般情况下不会造成冲突，所以在数据进行提交更新的时候，才会正式对数据的冲突与否进行检测，如果发现冲突了，则让返回用户错误的信息，让用户决定如何去做。
-    * 悲观锁  
-    指的是对数据被外界（包括本系统当前的其他事务，以及来自外部系统的事务处理）修改持保守态度，因此，在整个数据处理过程中，将数据处于锁定状态。悲观锁的实现，往往依靠数据库提供的锁机制
+    * 乐观锁假设认为数据一般情况下不会造成冲突，所以在数据进行提交更新的时候，才会正式对数据的冲突与否进行检测，如果发现冲突了，则让返回用户错误的信息，让用户决定如何去做。
+    * 悲观锁指的是对数据被外界（包括本系统当前的其他事务，以及来自外部系统的事务处理）修改持保守态度，
+    因此，在整个数据处理过程中，将数据处于锁定状态。悲观锁的实现，往往依靠数据库提供的锁机制
 1. volatile关键字的作用  
     保证变量的可见性
-1. Runnable接口和Callable接口的区别
-    * 有点深的问题了，也看出一个Java程序员学习知识的广度。
-    * Runnable接口中的run()方法的返回值是void，它做的事情只是纯粹地去执行run()方法中的代码而已；Callable接口中的call()方法是有返回值的，是一个泛型，和Future、FutureTask配合可以用来获取异步执行的结果。
-    * 这其实是很有用的一个特性，因为多线程相比单线程更难、更复杂的一个重要原因就是因为多线程充满着未知性，某条线程是否执行了？某条线程执行了多久？某条线程执行的时候我们期望的数据是否已经赋值完毕？无法得知，我们能做的只是等待这条多线程的任务执行完毕而已。而Callable+Future/FutureTask却可以获取多线程运行的结果，可以在等待时间太长没获取到需要的数据的情况下取消该线程的任务，真的是非常有用。
+1. Callable与Future
+    * CallableAndFutureTask，利用Thread启动单线程
+    ```java
+    void testCallableAndFutureTask() throws InterruptedException, ExecutionException {
+        Callable<Integer> callable = () -> new Random().nextInt(100);
+        FutureTask<Integer> future = new FutureTask<>(callable);
+        new Thread(future).start();
+            Thread.sleep(5000);// 可能做一些事情
+            System.out.println(future.get());
+    }
+    ```
+    * CallableAndFuture，利用线程池，启动单线程
+    ```java
+    void testCallableAndFuture() throws InterruptedException, ExecutionException {
+        ExecutorService threadPool = Executors.newSingleThreadExecutor();
+        Future<Integer> future = threadPool.submit(() -> new Random().nextInt(100));
+            Thread.sleep(5000);// 可能做一些事情
+            System.out.println(future.get());
+    }
+    ```
+
+    * CallableAndFuture，利用线程池，启动单多线程
+    ```java
+    void multipleReturnValues() throws InterruptedException, ExecutionException {
+        ExecutorService threadPool = Executors.newCachedThreadPool();
+        CompletionService<Integer> cs = new ExecutorCompletionService<>(threadPool);
+        for (int i = 1; i < 5; i++) {
+            final int taskID = i;
+            cs.submit(() -> taskID);
+        }
+        // 可能做一些事情
+        for (int i = 1; i < 5; i++) {
+                System.out.println(cs.take().get());
+        }
+    }
+    ```
+    * 和Runnable接口中的run()方法不同, Callable接口中的call()方法是有返回值的
 1. CyclicBarrier和CountDownLatch的区别
     * 两个看上去有点像的类，都在java.util.concurrent下，都可以用来表示代码运行到某个点上，二者的区别在于：
     * CyclicBarrier的某个线程运行到某个点上之后，该线程即停止运行，直到所有的线程都到达了这个点，所有线程才重新运行；CountDownLatch则不是，某线程运行到某个点上之后，只是给某个数值-1而已，该线程继续运行
