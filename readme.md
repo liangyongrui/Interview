@@ -382,42 +382,96 @@
         * poll(long timeout, TimeUnit unit): 如果在指定时间内，队列一旦有数据可取，则立即返回队列中的数据，否则返回null
         * take():若BlockingQueue为空， 则进入等待状态直到BlockingQueue有新的数据被加入; 
         * drainTo(Collection<? super E> c, int maxElements):一次性从BlockingQueue获取所有可用的数据对象（还可以指定获取数据的个数，第二个参数可选），通过该方法，可以提升获取数据效率；不需要多次分批加锁或释放锁。
-
 1. 锁（lock）和监视器（monitor）有什么区别？
     * 锁是为了实现监视器排他性的一种手段
 1. 怎么检测一个线程是否持有对象监视器
     * Thread类提供了一个holdsLock(Object obj)方法
     * 当且仅当对象obj的监视器被某当前线程持有的时候才会返回true，注意这是一个static方法.
-1. ConcurrentHashMap
-1. FutureTask是什么
+1. Executor框架 【待学习】
+    * 内容有点多，有空整理
 1. Java编程写一个会导致死锁的程序
+    ```Java
+    class DeadLock {
+        private static final String obj1 = "obj1";
+        private static final String obj2 = "obj2";
+    
+        public static void main(String[] args) {
+            ExecutorService es = Executors.newFixedThreadPool(2);
+            es.submit(() -> {
+                System.out.println("Lock1 running");
+                while (true) {
+                    synchronized (DeadLock.obj1) {
+                        System.out.println("Lock1 lock obj1");
+                        Thread.sleep(3000);//获取obj1后先等一会儿，让Lock2有足够的时间锁住obj2
+                        synchronized (DeadLock.obj2) {
+                            System.out.println("Lock1 lock obj2");
+                        }}}});
+    
+            es.submit(() -> {
+                System.out.println("Lock1 running");
+                while (true) {
+                    synchronized (DeadLock.obj2) {
+                        System.out.println("Lock2 lock obj2");
+                        Thread.sleep(3000);
+                        synchronized (DeadLock.obj1) {
+                            System.out.println("Lock2 lock obj1");
+                        }}}});
+        }
+    }
+    ```
 1. 怎么唤醒一个阻塞的线程
-    * 如果线程是因为调用了wait()、sleep()或者join()方法而导致的阻塞，可以中断线程，并且通过抛出InterruptedException来唤醒它；如果线程遇到了IO阻塞，无能为力，因为IO是操作系统实现的，Java代码并没有办法直接接触到操作系统。
+    * 如果线程是因为调用了wait()、sleep()或者join()方法而导致的阻塞，可以中断线程，并且通过抛出InterruptedException来唤醒它；
+    * 如果线程遇到了IO阻塞，无能为力，因为IO是操作系统实现的，Java代码并没有办法直接接触到操作系统。
 1. 什么是多线程的上下文切换
-    * 多线程的上下文切换是指CPU控制权由一个已经正在运行的线程切换到另外一个就绪并等待获取CPU执行权的线程的过程。   
+    * CPU控制权由一个已经正在运行的线程切换到另外一个就绪并等待获取CPU执行权的线程的过程。   
 1. 什么是自旋
     * 让等待锁的线程不要被阻塞，而是在synchronized的边界做忙循环，这就是自旋。
 1. 什么是CAS
     * CAS，全称为Compare and Set，即比较-设置。
-    * 假设有三个操作数：内存值V、旧的预期值A、要修改的值B，当且仅当预期值A和内存值V相同时，才会将内存值修改为B并返回true，否则什么都不做并返回false。当然CAS一定要volatile变量配合，这样才能保证每次拿到的变量是主内存中最新的那个值
-1. 什么是AQS
-    * 简单说一下AQS，AQS全称为AbstractQueuedSychronizer，翻译过来应该是抽象队列同步器。
-    * 如果说java.util.concurrent的基础是CAS的话，那么AQS就是整个Java并发包的核心了，ReentrantLock、CountDownLatch、Semaphore等等都用到了它。AQS实际上以双向队列的形式连接所有的Entry，比方说ReentrantLock，所有等待的线程都被放在一个Entry中并连成双向队列，前面一个线程使用ReentrantLock好了，则双向队列实际上的第一个Entry开始运行。
+    * 假设有三个操作数：内存值V、旧的预期值A、要修改的值B，
+    * 当且仅当预期值A和内存值V相同时，才会将内存值修改为B并返回true，
+    * 否则什么都不做并返回false。当然CAS一定要volatile变量配合，这样才能保证每次拿到的变量是主内存中最新的那个值
+1. 什么是AQS【待学习】
+    * http://www.cnblogs.com/waterystone/p/4920797.html
+    * 内容较多，以后再学
+    * 简单说一下AQS，AQS全称为AbstractQueuedSynchronizer，翻译过来应该是抽象队列同步器。
+    * 如果说java.util.concurrent的基础是CAS的话，那么AQS就是整个Java并发包的核心了，ReentrantLock、CountDownLatch、Semaphore等等都用到了它。
+    * AQS实际上以双向队列的形式连接所有的Entry，比方说ReentrantLock，所有等待的线程都被放在一个Entry中并连成双向队列，前面一个线程使用ReentrantLock好了，则双向队列实际上的第一个Entry开始运行。
     * AQS定义了对双向队列所有的操作，而只开放了tryLock和tryRelease方法给开发者使用，开发者可以根据自己的实现重写tryLock和tryRelease方法，以实现自己的并发功能。
 1. Semaphore有什么作用
-    * Java中的Semaphore是一种新的同步类，它是一个计数信号。从概念上讲，从概念上讲，信号量维护了一个许可集合。如有必要，在许可可用前会阻塞每一个 acquire()，然后再获取该许可。每个 release()添加一个许可，从而可能释放一个正在阻塞的获取者。但是，不使用实际的许可对象，Semaphore只对可用许可的号码进行计数，并采取相应的行动。信号量常常用于多线程的代码中，比如数据库连接池。
-1. Hashtable的size()方法中明明只有一条语句”return count”，为什么还要做同步？
-   * 同一时间只能有一条线程执行固定类的同步方法
-   * 对于类的非同步方法，可以多条线程同时访问。
-   * 可能线程A在执行Hashtable的put方法添加数据，线程B则可以正常调用size()方法读取Hashtable中当前元素的个数，那读取到的值可能不是最新的，可能线程A添加了完了数据，但是没有对size++，线程B就已经读取size了，那么对于线程B来说读取到的size一定是不准确的。而给size()方法加了同步之后，意味着线程B调用size()方法只有在线程A调用put方法完毕之后才可以调用，这样就保证了线程安全性
-1. 高并发、任务执行时间短的业务怎样使用线程池？
-并发不高、任务执行时间长的业务怎样使用线程池？
-并发高、业务执行时间长的业务怎样使用线程池？
-    1. 高并发、任务执行时间短的业务，线程池线程数可以设置为CPU核数+1，减少线程上下文的切换
+    ```Java
+    class SemaphoreTest {
+        public static void main(String[] args) {
+            ExecutorService exec = Executors.newCachedThreadPool();
+            // 只能5个线程同时访问 
+            final Semaphore semp = new Semaphore(5);
+            for (int index = 0; index < 20; index++) {
+                final int NO = index;
+                exec.execute(() -> {
+                    try {
+                        // 获取许可 
+                        semp.acquire();
+                        System.out.println("Accessing: " + NO);
+                        Thread.sleep((long) (Math.random() * 10000));
+                        semp.release();
+                    } catch (InterruptedException ignored) {
+                    }
+                });
+            }
+            exec.shutdown();
+        }
+    }
+    ```
+    * Java中的Semaphore是一种新的同步类，它是一个计数信号。
+    * 从概念上讲，信号量维护了一个许可集合。如有必要，在许可可用前会阻塞每一个 acquire()，然后再获取该许可。每个 release()添加一个许可，从而可能释放一个正在阻塞的获取者。
+    * 但是，不使用实际的许可对象，Semaphore只对可用许可的号码进行计数，并采取相应的行动。
+    * 信号量常常用于多线程的代码中，比如数据库连接池。
+1. 线程池的使用场景
+    1. 高并发、任务执行时间短的业务：线程池线程数可以设置为CPU核数+1，减少线程上下文的切换
     2. 并发不高、任务执行时间长的业务要区分开看：
         * 假如是业务时间长集中在IO操作上，也就是IO密集型的任务，因为IO操作并不占用CPU，所以不要让所有的CPU闲下来，可以加大线程池中的线程数目，让CPU处理更多的业务
         * 假如是业务时间长集中在计算操作上，也就是计算密集型任务，这个就没办法了，和（1）一样吧，线程池中的线程数设置得少一些，减少线程上下文的切换
-    3. 并发高、业务执行时间长，解决这种类型任务的关键不在于线程池而在于整体架构的设计，看看这些业务里面某些数据是否能做缓存是第一步，增加服务器是第二步，至于线程池的设置，设置参考（2）。最后，业务执行时间长的问题，也可能需要分析一下，看看能不能使用中间件对任务进行拆分和解耦。
+    3. 并发高、业务执行时间长：解决这种类型任务的关键不在于线程池而在于整体架构的设计，看看这些业务里面某些数据是否能做缓存是第一步，增加服务器是第二步，至于线程池的设置，设置参考（2）。最后，业务执行时间长的问题，也可能需要分析一下，看看能不能使用中间件对任务进行拆分和解耦。
 1. Java中什么是竞态条件？ 
 1. Java中如何停止一个线程？
     * http://www.tengleitech.com/archives/107038
