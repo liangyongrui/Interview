@@ -100,7 +100,8 @@
         * Ki (i=1...n)为关键字，且关键字按顺序排序K(i-1)< Ki。
         * Pi为指向子树根的结点，且指针P(i-1)指向子树中所有结点的关键字均小于Ki，但都大于K(i-1)。
         * 关键字的个数n必须满足： ceil(m / 2)-1 <= n <= m-1。
-    * 插入过程：
+    * 插入过程：  
+    ![插入过程](https://raw.githubusercontent.com/llysrv/Interview/master/img/B-tree.jpg)
     
 # 框架
 ### Spring
