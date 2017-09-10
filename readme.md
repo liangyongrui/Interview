@@ -87,8 +87,21 @@
 * DCL(Data Control Language，数据控制语言)  
   用来设置或更改数据库用户或角色权限的语句，包括grant,deny,revoke等语句。
 
-
-1. https://www.nowcoder.com/test/question/done?tid=9501873&qid=46334#summary
+1. sql的join
+    * http://www.w3school.com.cn/sql/sql_join.asp
+    
+1. B-tree
+    * 假设B-tree为m阶
+    * 树中每个结点至多有m个孩子；
+    * 除根结点和叶子结点外，其它每个结点至少有有ceil(m / 2)个孩子；
+    * 若根结点不是叶子结点，则至少有2个孩子(特殊情况：没有孩子的根结点)
+    * 【不懂】所有叶子结点都出现在同一层，叶子结点不包含任何关键字信息(可以看做是外部结点或查询失败的结点，实际上这些结点不存在，指向这些结点的指针都为null)；
+    * 每个非终端结点中包含有n个关键字信息: (P0，K1，P1，K2，P2，......，Kn，Pn)。其中：
+        * Ki (i=1...n)为关键字，且关键字按顺序排序K(i-1)< Ki。
+        * Pi为指向子树根的结点，且指针P(i-1)指向子树中所有结点的关键字均小于Ki，但都大于K(i-1)。
+        * 关键字的个数n必须满足： ceil(m / 2)-1 <= n <= m-1。
+    * 插入过程：
+    
 # 框架
 ### Spring
 1. spring 的优点？
@@ -473,14 +486,16 @@
         * 假如是业务时间长集中在计算操作上，也就是计算密集型任务，这个就没办法了，和（1）一样吧，线程池中的线程数设置得少一些，减少线程上下文的切换
     3. 并发高、业务执行时间长：解决这种类型任务的关键不在于线程池而在于整体架构的设计，看看这些业务里面某些数据是否能做缓存是第一步，增加服务器是第二步，至于线程池的设置，设置参考（2）。最后，业务执行时间长的问题，也可能需要分析一下，看看能不能使用中间件对任务进行拆分和解耦。
 1. Java中什么是竞态条件？ 
+    * 计算的正确性取决于多个线程的交替执行时序时，就会发生竞态条件。
 1. Java中如何停止一个线程？
-    * http://www.tengleitech.com/archives/107038
-    
+    * 使用退出标志，使线程正常退出，也就是当run方法完成后线程终止。
+    * 使用stop方法强行终止，但是不推荐这个方法，因为stop和suspend及resume一样都是过期作废的方法。
+    * 使用interrupt方法中断线程。
 1. 一个线程运行时发生异常会怎样？
     * 简单的说，如果异常没有被捕获该线程将会停止执行。
     * Thread.UncaughtExceptionHandler是用于处理未捕获异常造成线程突然中断情况的一个内嵌接口。当一个未捕获异常将造成线程中断的时候JVM会使用Thread.getUncaughtExceptionHandler()来查询线程的UncaughtExceptionHandler并将线程和异常作为参数传递给handler的uncaughtException()方法进行处理。
 
-1. Java中interrupted 和 isInterruptedd方法的区别？
+1. Java中interrupted 和 isInterrupted方法的区别？
     * interrupted() 和 isInterrupted()的主要区别是前者会将中断状态清除而后者不会。
     * Java多线程的中断机制是用内部标识来实现的，调用Thread.interrupt()来中断一个线程就会设置中断标识为true。
     * 当中断线程调用静态方法Thread.interrupted()来检查中断状态时，中断状态会被清零。
@@ -854,7 +869,7 @@
 1. https://www.nowcoder.com/test/question/done?tid=9501873&qid=46327#summary
 
 
-# 小算法
+# 小算法 或 智商题
 只总结一些我接触的少，或者常见但是忘记了的算法 
 1. Reservoir Sampling  
     【待补充】
@@ -871,5 +886,10 @@
         
 3. 哈夫曼树
 
+1. 老鼠喝可乐
+    * 问题：有15瓶可乐，其中有一瓶是坏的，问需要多少只老鼠同时喝才能知道哪一瓶可乐是坏的
+    * 答案：不懂。。我感觉是二进制问题，我猜的是4
+1. 2、5、7改变开关
+1. 两个人约6~7点见面，如果等超过15min就回家，问能见面的概率
 # Python 3
 Python相关内容，点击[这里](https://github.com/llysrv/Interview/tree/master/Python)
