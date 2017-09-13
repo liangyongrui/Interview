@@ -88,7 +88,10 @@
   用来设置或更改数据库用户或角色权限的语句，包括grant,deny,revoke等语句。
 
 1. sql的join
-    * http://www.w3school.com.cn/sql/sql_join.asp
+    * JOIN: 如果表中有至少一个匹配，则返回行
+    * LEFT JOIN: 即使右表中没有匹配，也从左表返回所有的行
+    * RIGHT JOIN: 即使左表中没有匹配，也从右表返回所有的行
+    * FULL JOIN: 只要其中一个表中存在匹配，就返回行
     
 1. B-tree
     * 假设B-tree为m阶
@@ -642,6 +645,7 @@
 
 ## Linux 
 1. 常用命令  
+    * https://www.zhihu.com/question/64063454
     1. cd 切换路径
     2. ls 列出文件
         * -l ：列出长数据串，包含文件的属性与权限数据等  
