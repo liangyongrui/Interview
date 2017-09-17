@@ -356,7 +356,7 @@
     }
     ```
 
-    * CallableAndFuture，利用线程池，启动单多线程
+    * CallableAndFuture，利用线程池，启动多线程
     ```java
     void multipleReturnValues() throws InterruptedException, ExecutionException {
         ExecutorService threadPool = Executors.newCachedThreadPool();
@@ -753,6 +753,11 @@
     * 结论：stdout使用了行缓冲区，stderr没使用缓冲区
     * 仔细的说，stdout只有在换行的时候才输出
 1. https://www.nowcoder.com/test/question/done?tid=9501873&qid=46328#summary
+
+1. 用户态 内核态
+1. find grep
+1. 文件权限5-7位
+
 # 设计模式
 
 ### 常见的23种设计模式
@@ -958,5 +963,11 @@
     * 答案：不懂。。我感觉是二进制问题，我猜的是4
 1. 2、5、7改变开关
 1. 两个人约6~7点见面，如果等超过15min就回家，问能见面的概率
+1. 堆排序
+1. 给你一个整型数组，把它补充成回文数组，要求所有的数字和最小
+    * 如： \[1,2,3,1,2\] -> \[1,2,1,3,1,2,1\] -> 11
+1. Hash
+    * http://blog.csdn.net/u011080472/article/details/51177412
+1. 有一个苹果，两个人轮流抛硬币，抛到正面的可以吃苹果。问先抛的人吃到苹果的概率
 # Python 3
 Python相关内容，点击[这里](https://github.com/llysrv/Interview/tree/master/Python)
