@@ -71,15 +71,15 @@
 * redis脚本使用lua解释器来执行脚本。redis 2.y版本通过内嵌支持lua环境。执行脚本的常用命令为eval
 * eval命令的基本语法如下
     * eval script numkeys key .. arg arg ...
-    *[eval命令](http://www.runoob.com/redis/redis-scripting.html)
+    * [eval命令](http://www.runoob.com/redis/redis-scripting.html)
     
 13. redis连接
 * auth "password"  客户端通过密码验证连接到redis服务 并检测服务是否运行 auth "password" 然后ping
-*[redis连接命令](http://www.runoob.com/redis/redis-connection.html)
+* [redis连接命令](http://www.runoob.com/redis/redis-connection.html)
 
 14. redis服务器
 * info获取redis服务器的统计信息
-*[redis服务器命令](http://www.runoob.com/redis/redis-server.html)
+* [redis服务器命令](http://www.runoob.com/redis/redis-server.html)
 
 15. redis数据备份与恢复
 * save命令创建当前数据库的备份 在redis安装目录中创建dump.rdb文件
@@ -102,7 +102,7 @@
     * 然后为这个socket设置tcp_nodelay属性，禁用nagle算法
     * 然后创建一个可读文件事件用于监听这个客户端socket的数据发送
     * 最大连接数在redis2.4中直接硬编码在代码里面的，2.6版本变成可配置的maxclients的默认值是10000，可以在redis.conf中对这个值修改
-    *[连接命令](http://www.runoob.com/redis/redis-client-connection.html)
+    * [连接命令](http://www.runoob.com/redis/redis-client-connection.html)
  
 19. redis 管道技术
 * redis管道技术可以在服务端未响应时，客户端可以继续向服务端发送请求,并最终一次读取所有服务端的响应
@@ -110,7 +110,7 @@
 * 显著提高了redis服务的性能
 
 20. redis分区
-*可能需要背 [分区](http://www.runoob.com/redis/redis-partitioning.html)
+* 可能需要背 [分区](http://www.runoob.com/redis/redis-partitioning.html)
 
 21. java使用redis
 * [大概就这样](http://www.runoob.com/redis/redis-java.html)
